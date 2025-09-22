@@ -34,11 +34,11 @@ public class Reservation {
     private Member member;
 
     @OneToMany(mappedBy = "reservation")
-    private List<Subject> subjects = new ArrayList<>();
+    private List<ReservationSubject> reservationSubjects = new ArrayList<>();
 
     @Builder
     private Reservation(Long roomNo, LocalDateTime startTime, LocalDateTime endTime,
-                        Member member, List<Subject> subjects) {
+                        Member member, List<ReservationSubject> reservationSubjects) {
         this.roomNo = roomNo;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -53,6 +53,6 @@ public class Reservation {
         }
 
         this.member = member;
-        this.subjects = subjects;
+        this.reservationSubjects = reservationSubjects;
     }
 }
