@@ -20,6 +20,10 @@ public class Member {
 
     private String password;
 
+    // 소셜 로그인 추가 시 (후에 구현 예정)
+    // private String provider;
+    // private String providerId;
+
     @OneToMany(mappedBy = "member")
     private List<Reservation> reservations = new ArrayList<>();
 
