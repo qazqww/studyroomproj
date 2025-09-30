@@ -23,7 +23,7 @@ public class Subject {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "subject")
     private List<ReservationSubject> reservationSubjects = new ArrayList<>();
 
     @Builder
