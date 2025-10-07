@@ -3,5 +3,9 @@ package com.raptarior.studyroomproj.repository;
 import com.raptarior.studyroomproj.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ReserveRepository extends JpaRepository<Reservation, Long> {
+
+    List<Reservation> findByMemberId(Long memberId);
 }

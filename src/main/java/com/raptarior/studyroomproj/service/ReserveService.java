@@ -32,11 +32,13 @@ public class ReserveService {
     }
 
     public List<ReserveResDTO> getReservationList(ReserveOtherReqDTO.GetMyReserveList memberId) {
-        // memberId와 일치하는 reservaion들을 리턴
-        return null;
+        List<Reservation> reservationList = reserveRepository.findByMemberId(memberId.memberId());
+        List<ReserveResDTO> reserveResDTOList = reserveMapper.entityToResDtoList(reservationList);
+        return reserveResDTOList;
     }
 
     public List<Long> getEntireRoomStatus() {
+//        reserveRepository.findAll().stream().map();
         LocalDateTime nowTime = LocalDateTime.now();
         // 취소되지 않은 예약 중 (시작 시간 < 현재 시간) & (현재 시간 < 마감 시간) 이 없는 방들을 리턴
         return null;
