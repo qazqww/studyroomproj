@@ -38,15 +38,15 @@ public class ReserveController {
     }
 
     @GetMapping
-    private ResponseEntity<List<Long>> getEntireRoomStatus() {
-        List<Long> roomList = reserveService.getEntireRoomStatus();
+    private ResponseEntity<List<Long>> getEmptyRoomList() {
+        List<Long> roomList = reserveService.getEmptyRoomList();
         return ResponseEntity.ok(roomList);
     }
 
     @GetMapping("/{roomNo}")
-    private ResponseEntity<ReserveResDTO> getAvailableTimeFromRoom(@PathVariable ReserveOtherReqDTO.GetRoom roomNo) {
-        ReserveResDTO reserveResDTO = reserveService.getAvailableTimeFromRoom(roomNo);
-        return ResponseEntity.ok(reserveResDTO);
+    private ResponseEntity<List<Integer>> getAvailableTimeFromRoom(@PathVariable ReserveOtherReqDTO.GetRoom roomNo) {
+        List<Integer> timeList = reserveService.getAvailableTimeFromRoom(roomNo);
+        return ResponseEntity.ok(timeList);
     }
 
     @GetMapping

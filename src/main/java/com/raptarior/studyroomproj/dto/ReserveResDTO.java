@@ -1,7 +1,6 @@
 package com.raptarior.studyroomproj.dto;
 
 import com.raptarior.studyroomproj.common.ReserveStatus;
-import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.entity.ReservationSubject;
 
 import java.time.LocalDateTime;

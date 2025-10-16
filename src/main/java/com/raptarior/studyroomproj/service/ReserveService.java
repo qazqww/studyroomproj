@@ -1,5 +1,6 @@
 package com.raptarior.studyroomproj.service;
 
+import com.raptarior.studyroomproj.common.ReserveStatus;
 import com.raptarior.studyroomproj.dto.ReserveInfoReqDTO;
 import com.raptarior.studyroomproj.dto.ReserveMapper;
 import com.raptarior.studyroomproj.dto.ReserveOtherReqDTO;
@@ -10,7 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 @RequiredArgsConstructor
 @Service
@@ -37,20 +42,40 @@ public class ReserveService {
         return reserveResDTOList;
     }
 
-    public List<Long> getEntireRoomStatus() {
-//        reserveRepository.findAll().stream().map();
-        LocalDateTime nowTime = LocalDateTime.now();
-        // 취소되지 않은 예약 중 (시작 시간 < 현재 시간) & (현재 시간 < 마감 시간) 이 없는 방들을 리턴
-        return null;
+    public List<Long> getEmptyRoomList() {
+        List<Long> roomList = reserveRepository.findAll().stream().filter(rsv ->
+            rsv.getStatus() != ReserveStatus.USING
+        ).map(rsv -> rsv.getRoomNo()).toList();
+        return roomList;
     }
 
-    public ReserveResDTO getAvailableTimeFromRoom(ReserveOtherReqDTO.GetRoom roomNo) {
-        // 해당 room의 가능한 시간 단위들 (ex. 13:00~14:00 비어있으면 13) 리스트로 리턴
-        return null;
+    /**
+     * 가능한 시간을 반환 (ex. 13 -> 13:00~14:00)
+     */
+    public List<Integer> getAvailableTimeFromRoom(ReserveOtherReqDTO.GetRoom roomNo) {
+        Set<Integer> usingTimes = new HashSet<>();
+        reserveRepository.findByRoomNo(roomNo.roomNo()).stream().forEach(rsv -> {
+            usingTimes.add(rsv.getStartTime().getHour());
+            usingTimes.add(rsv.getEndTime().getHour());
+        });
+        List<Integer> availableTimeList = IntStream.range(0, 24)
+                .filter(n -> !usingTimes.contains(n)).boxed().toList();
+        return availableTimeList;
     }
 
+    /**
+     * 현재 시간으로부터 1시간 내에 예약이 없는 방들을 반환
+     */
     public List<Long> getAvailableRoomListFromTime(ReserveOtherReqDTO.GetRoomListFromTime time) {
-        // 현재 시간으로부터 1시간 후까지 예약이 없는 방들 리턴
-        return null;
+        List<Long> usingRoomList = reserveRepository.findAll().stream().filter(rsv ->
+                rsv.getStatus() == ReserveStatus.RESERVED &&
+                        rsv.getStartTime().isBefore(LocalDateTime.now().plusHours(1))
+        ).map(rsv -> rsv.getRoomNo()).toList();
+        Set<Long> usingRooms = new HashSet<>(usingRoomList);
+
+        List<Long> availableRoomList = LongStream.range(0, 100)
+                .filter(n -> !usingRooms.contains(n)).boxed().toList();
+
+        return availableRoomList;
     }
 }
