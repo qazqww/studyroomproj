@@ -24,7 +24,7 @@ public class ReserveService {
     private final ReserveRepository reserveRepository;
     private final ReserveMapper reserveMapper;
 
-    public Long createReserve(ReserveInfoReqDTO reserveInfoReqDto) {
+    public Long createReservation(ReserveInfoReqDTO reserveInfoReqDto) {
         Reservation reservation = reserveMapper.infoReqDtoToEntity(reserveInfoReqDto);
         Reservation result = reserveRepository.save(reservation);
         return result.getId();

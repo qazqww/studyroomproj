@@ -2,10 +2,7 @@ package com.raptarior.studyroomproj.entity;
 
 import com.raptarior.studyroomproj.common.ReserveStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,16 +39,8 @@ public class Reservation {
         this.roomNo = roomNo;
         this.startTime = startTime;
         this.endTime = endTime;
-
-        LocalDateTime nowTime = LocalDateTime.now();
-        this.createdTime = nowTime;
-        if (nowTime.isAfter(startTime)) {
-            this.status = ReserveStatus.USING;
-        }
-        else {
-            this.status = ReserveStatus.RESERVED;
-        }
-
+        this.status = ReserveStatus.RESERVED;
+        this.createdTime = LocalDateTime.now();
         this.member = member;
         this.reservationSubjects = reservationSubjects;
     }

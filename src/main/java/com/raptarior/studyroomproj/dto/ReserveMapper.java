@@ -5,7 +5,8 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = { MemberMapper.class, ReservationSubjectMapper.class })
 public interface ReserveMapper {
 
     Reservation infoReqDtoToEntity(ReserveInfoReqDTO reserveInfoReqDTO);
