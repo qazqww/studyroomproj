@@ -1,9 +1,6 @@
 package com.raptarior.studyroomproj.service;
 
-import com.raptarior.studyroomproj.common.ReserveStatus;
 import com.raptarior.studyroomproj.dto.*;
-import com.raptarior.studyroomproj.entity.Member;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +18,8 @@ class ReserveServiceTest {
     ReserveService reserveService;
     @Autowired
     MemberService memberService;
-    @Autowired
-    MemberMapper memberMapper;
 
-    Member member1;
-    Member member2;
+    Long memberId1, memberId2;
 
     @BeforeEach
     void createMember() {
@@ -40,10 +34,8 @@ class ReserveServiceTest {
                 .password("353")
                 .build();
 
-        Long memberId1 = memberService.joinMember(dto);
-        Long memberId2 = memberService.joinMember(dto2);
-        member1 = memberMapper.resDtoToEntity(memberService.findMember(memberId1));
-        member2 = memberMapper.resDtoToEntity(memberService.findMember(memberId2));
+        memberId1 = memberService.joinMember(dto);
+        memberId2 = memberService.joinMember(dto2);
     }
 
     @Test
@@ -52,18 +44,17 @@ class ReserveServiceTest {
                 .roomNo(1L)
                 .startTime(LocalDateTime.now().plusHours(1))
                 .endTime(LocalDateTime.now().plusHours(2))
-                .member(member1)
+                .memberId(memberId1)
                 .reservationSubjects(new ArrayList<>()).build();
 
         Long resultId = reserveService.createReservation(dto);
         ReserveResDTO result = reserveService.getReservation(new ReserveOtherReqDTO.GetReserve(resultId));
 
-        System.out.println("DTO " + dto);
-        System.out.println("Result " + result);
-
-        assertThat(result).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(dto);
+        assertThat(result.getRoomNo()).isEqualTo(dto.getRoomNo());
+        assertThat(result.getStartTime()).isEqualTo(dto.getStartTime());
+        assertThat(result.getEndTime()).isEqualTo(dto.getEndTime());
+        assertThat(result.getMember().getId()).isEqualTo(dto.getMemberId());
+        assertThat(result.getReservationSubjects()).isEqualTo(dto.getReservationSubjects());
     }
 
     @Test

@@ -5,8 +5,11 @@ import com.raptarior.studyroomproj.dto.ReserveInfoReqDTO;
 import com.raptarior.studyroomproj.dto.ReserveMapper;
 import com.raptarior.studyroomproj.dto.ReserveOtherReqDTO;
 import com.raptarior.studyroomproj.dto.ReserveResDTO;
+import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.entity.Reservation;
+import com.raptarior.studyroomproj.repository.MemberRepository;
 import com.raptarior.studyroomproj.repository.ReserveRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +26,18 @@ public class ReserveService {
 
     private final ReserveRepository reserveRepository;
     private final ReserveMapper reserveMapper;
+    private final MemberRepository memberRepository;
 
     public Long createReservation(ReserveInfoReqDTO reserveInfoReqDto) {
         Reservation reservation = reserveMapper.infoReqDtoToEntity(reserveInfoReqDto);
+        Member member = memberRepository.findById(reserveInfoReqDto.getMemberId()).orElseThrow();
+        reservation.setMember(member);
+
         Reservation result = reserveRepository.save(reservation);
         return result.getId();
     }
 
+    @Transactional
     public ReserveResDTO getReservation(ReserveOtherReqDTO.GetReserve reserveId) {
         Reservation reservation = reserveRepository.findById(reserveId.id()).orElseThrow();
         ReserveResDTO reserveResDTO = reserveMapper.entityToResDto(reservation);

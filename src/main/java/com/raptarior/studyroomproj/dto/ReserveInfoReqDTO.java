@@ -21,7 +21,7 @@ public class ReserveInfoReqDTO {
 
     private LocalDateTime endTime;
 
-    private Member member;
+    private Long memberId;
 
     private List<ReservationSubject> reservationSubjects;
 }
