@@ -1,10 +1,10 @@
 package com.raptarior.studyroomproj.dto;
 
 import com.raptarior.studyroomproj.common.ReserveStatus;
-import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.entity.ReservationSubject;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -27,7 +27,8 @@ public class ReserveResDTO {
 
     private LocalDateTime createdTime;
 
-    private Member member;
+    @Setter
+    private Long memberId;
 
     private List<ReservationSubject> reservationSubjects;
 }

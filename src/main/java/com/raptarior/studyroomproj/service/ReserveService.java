@@ -9,9 +9,9 @@ import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.entity.Reservation;
 import com.raptarior.studyroomproj.repository.MemberRepository;
 import com.raptarior.studyroomproj.repository.ReserveRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -37,13 +37,14 @@ public class ReserveService {
         return result.getId();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ReserveResDTO getReservation(ReserveOtherReqDTO.GetReserve reserveId) {
         Reservation reservation = reserveRepository.findById(reserveId.id()).orElseThrow();
         ReserveResDTO reserveResDTO = reserveMapper.entityToResDto(reservation);
         return reserveResDTO;
     }
 
+    @Transactional(readOnly = true)
     public List<ReserveResDTO> getReservationList(ReserveOtherReqDTO.GetMyReserveList memberId) {
         List<Reservation> reservationList = reserveRepository.findByMemberId(memberId.memberId());
         List<ReserveResDTO> reserveResDTOList = reserveMapper.entityToResDtoList(reservationList);

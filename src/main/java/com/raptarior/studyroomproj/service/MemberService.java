@@ -5,9 +5,9 @@ import com.raptarior.studyroomproj.dto.MemberMapper;
 import com.raptarior.studyroomproj.dto.MemberResDTO;
 import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service

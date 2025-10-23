@@ -38,7 +38,7 @@ class ReserveMapperTest {
         assertThat(reservation.getRoomNo()).isEqualTo(reserveResDTO.getRoomNo());
         assertThat(reservation.getStartTime()).isEqualTo(reserveResDTO.getStartTime());
         assertThat(reservation.getEndTime()).isEqualTo(reserveResDTO.getEndTime());
-        assertThat(reservation.getMember()).isEqualTo(reserveResDTO.getMember());
+        assertThat(reservation.getMember().getId()).isEqualTo(reserveResDTO.getMemberId());
         assertThat(reservation.getReservationSubjects()).isEqualTo(reserveResDTO.getReservationSubjects());
     }
 
