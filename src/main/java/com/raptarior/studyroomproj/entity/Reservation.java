@@ -40,7 +40,12 @@ public class Reservation {
         this.roomNo = roomNo;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.status = ReserveStatus.RESERVED;
+        if (startTime.isBefore(LocalDateTime.now())) {
+            this.status = ReserveStatus.USING;
+        }
+        else {
+            this.status = ReserveStatus.RESERVED;
+        }
         this.createdTime = LocalDateTime.now();
         this.member = member;
         this.reservationSubjects = reservationSubjects;
