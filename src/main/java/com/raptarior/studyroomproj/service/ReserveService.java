@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,9 +54,8 @@ public class ReserveService {
     }
 
     public List<Long> getEmptyRoomList() {
-        List<Long> usingRoomList = reserveRepository.findAll().stream().filter(rsv ->
-            rsv.getStatus() == ReserveStatus.USING
-        ).map(rsv -> rsv.getRoomNo()).toList();
+        List<Long> usingRoomList = reserveRepository.findByStatus(ReserveStatus.USING).stream()
+                .map(rsv -> rsv.getRoomNo()).toList();
 
         Set<Long> usingRooms = new HashSet<>(usingRoomList);
 
@@ -69,8 +70,10 @@ public class ReserveService {
      */
     public List<Integer> getAvailableTimeFromRoom(ReserveOtherReqDTO.GetRoom roomNo) {
         Set<Integer> usingTimes = new HashSet<>();
-        reserveRepository.findByRoomNo(roomNo.roomNo()).stream()
-                .filter(rsv -> rsv.getStartTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth())
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        LocalDateTime tomorrow = today.plusDays(1);
+
+        reserveRepository.findByRoomNoInToday(roomNo.roomNo(), today, tomorrow).stream()
                 .forEach(rsv -> {
                     for (int i = rsv.getStartTime().getHour(); i <= rsv.getEndTime().getHour(); i++) {
                         usingTimes.add(i);
@@ -85,11 +88,11 @@ public class ReserveService {
      * 해당 시간으로부터 1시간 내에 예약이 없는 방들을 반환
      */
     public List<Long> getAvailableRoomListFromTime(ReserveOtherReqDTO.GetRoomListFromTime time) {
-        List<Long> usingRoomList = reserveRepository.findAll().stream().filter(rsv ->
-                rsv.getStatus() == ReserveStatus.USING ||
-                        (rsv.getStatus() == ReserveStatus.RESERVED &&
-                        rsv.getStartTime().isBefore(time.time().plusHours(1)))
-                ).map(rsv -> rsv.getRoomNo()).toList();
+        LocalDateTime plusOneHour = time.time().plusHours(1);
+
+        List<Long> usingRoomList = reserveRepository.findByStatusAndTime(plusOneHour).stream()
+                .map(rsv -> rsv.getRoomNo()).toList();
+
         Set<Long> usingRooms = new HashSet<>(usingRoomList);
 
         List<Long> availableRoomList = LongStream.range(0, 100)

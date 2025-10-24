@@ -22,6 +22,8 @@ public class Reservation {
 
     private LocalDateTime endTime;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(10)")
     private ReserveStatus status;
 
     private LocalDateTime createdTime;

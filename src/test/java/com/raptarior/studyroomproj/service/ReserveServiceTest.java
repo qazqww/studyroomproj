@@ -97,6 +97,7 @@ class ReserveServiceTest {
 
     @Test
     void getEmptyRoomList() {
+        reserveRepository.deleteAll();
         List<Long> emptyRoomList = reserveService.getEmptyRoomList();
         assertThat(emptyRoomList.size()).isEqualTo(100);
 
@@ -122,6 +123,8 @@ class ReserveServiceTest {
 
     @Test
     void getAvailableTimeFromRoom() {
+        reserveRepository.deleteAll();
+
         LocalDateTime startTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(3));
         LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(5));
         LocalDateTime startTime2 = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(10));
@@ -149,10 +152,12 @@ class ReserveServiceTest {
 
     @Test
     void getAvailableRoomListFromTime() {
-        LocalDateTime startTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(16));
-        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(18));
-        LocalDateTime startTime2 = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(17));
-        LocalDateTime endTime2 = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(18));
+        reserveRepository.deleteAll();
+
+        LocalDateTime startTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(20));
+        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(21));
+        LocalDateTime startTime2 = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(21));
+        LocalDateTime endTime2 = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT.plusHours(22));
 
         ReserveInfoReqDTO dto = ReserveInfoReqDTO.builder()
                 .roomNo(50L)
@@ -170,7 +175,7 @@ class ReserveServiceTest {
         reserveService.createReservation(dto);
         reserveService.createReservation(dto2);
 
-        LocalDateTime time = LocalDateTime.of(LocalDate.now(), LocalTime.of(15, 30, 0));
+        LocalDateTime time = LocalDateTime.of(LocalDate.now(), LocalTime.of(19, 30, 0));
         List<Long> list = reserveService.getAvailableRoomListFromTime(new ReserveOtherReqDTO.GetRoomListFromTime(time));
         assertThat(list).doesNotContain(50L);
         assertThat(list).contains(51L);
