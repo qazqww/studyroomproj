@@ -57,7 +57,7 @@ class ReserveServiceTest {
                 .reservationSubjects(new ArrayList<>()).build();
 
         Long resultId = reserveService.createReservation(dto);
-        ReserveResDTO result = reserveService.getReservation(new ReserveOtherReqDTO.GetReserve(resultId));
+        ReserveResDTO result = reserveService.getReservation(resultId);
 
         assertThat(result).usingRecursiveComparison()
                 .ignoringFields("id", "status", "createdTime")
@@ -89,8 +89,8 @@ class ReserveServiceTest {
         reserveService.createReservation(dto2);
         reserveService.createReservation(dto3);
 
-        List<ReserveResDTO> list = reserveService.getReservationList(new ReserveOtherReqDTO.GetMyReserveList(memberId1));
-        List<ReserveResDTO> list2 = reserveService.getReservationList(new ReserveOtherReqDTO.GetMyReserveList(memberId2));
+        List<ReserveResDTO> list = reserveService.getReservationList(memberId1);
+        List<ReserveResDTO> list2 = reserveService.getReservationList(memberId2);
         assertThat(list.size()).isEqualTo(2);
         assertThat(list2.size()).isEqualTo(1);
     }
@@ -146,7 +146,7 @@ class ReserveServiceTest {
         reserveService.createReservation(dto);
         reserveService.createReservation(dto2);
 
-        List<Integer> timeList = reserveService.getAvailableTimeFromRoom(new ReserveOtherReqDTO.GetRoom(30L));
+        List<Integer> timeList = reserveService.getAvailableTimeFromRoom(30L);
         assertThat(timeList).doesNotContain(3, 4, 5, 10, 11, 12, 13, 14, 15);
     }
 
@@ -176,7 +176,7 @@ class ReserveServiceTest {
         reserveService.createReservation(dto2);
 
         LocalDateTime time = LocalDateTime.of(LocalDate.now(), LocalTime.of(19, 30, 0));
-        List<Long> list = reserveService.getAvailableRoomListFromTime(new ReserveOtherReqDTO.GetRoomListFromTime(time));
+        List<Long> list = reserveService.getAvailableRoomListFromTime(new ReserveOtherReqDTO.GetRoomList(time));
         assertThat(list).doesNotContain(50L);
         assertThat(list).contains(51L);
     }

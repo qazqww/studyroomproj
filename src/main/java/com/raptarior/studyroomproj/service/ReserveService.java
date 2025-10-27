@@ -30,9 +30,9 @@ public class ReserveService {
     private final ReserveMapper reserveMapper;
     private final MemberRepository memberRepository;
 
-    public Long createReservation(ReserveInfoReqDTO reserveInfoReqDto) {
-        Reservation reservation = reserveMapper.infoReqDtoToEntity(reserveInfoReqDto);
-        Member member = memberRepository.findById(reserveInfoReqDto.getMemberId()).orElseThrow();
+    public Long createReservation(ReserveInfoReqDTO req) {
+        Reservation reservation = reserveMapper.infoReqDtoToEntity(req);
+        Member member = memberRepository.findById(req.getMemberId()).orElseThrow();
         reservation.setMember(member);
 
         Reservation result = reserveRepository.save(reservation);
@@ -40,15 +40,15 @@ public class ReserveService {
     }
 
     @Transactional(readOnly = true)
-    public ReserveResDTO getReservation(ReserveOtherReqDTO.GetReserve reserveId) {
-        Reservation reservation = reserveRepository.findById(reserveId.id()).orElseThrow();
+    public ReserveResDTO getReservation(Long reserveId) {
+        Reservation reservation = reserveRepository.findById(reserveId).orElseThrow();
         ReserveResDTO reserveResDTO = reserveMapper.entityToResDto(reservation);
         return reserveResDTO;
     }
 
     @Transactional(readOnly = true)
-    public List<ReserveResDTO> getReservationList(ReserveOtherReqDTO.GetMyReserveList memberId) {
-        List<Reservation> reservationList = reserveRepository.findByMemberId(memberId.memberId());
+    public List<ReserveResDTO> getReservationList(Long memberId) {
+        List<Reservation> reservationList = reserveRepository.findByMemberId(memberId);
         List<ReserveResDTO> reserveResDTOList = reserveMapper.entityToResDtoList(reservationList);
         return reserveResDTOList;
     }
@@ -68,12 +68,12 @@ public class ReserveService {
     /**
      * 가능한 시간을 반환 (ex. 13 -> 13:00~14:00)
      */
-    public List<Integer> getAvailableTimeFromRoom(ReserveOtherReqDTO.GetRoom roomNo) {
+    public List<Integer> getAvailableTimeFromRoom(Long roomNo) {
         Set<Integer> usingTimes = new HashSet<>();
         LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime tomorrow = today.plusDays(1);
 
-        reserveRepository.findByRoomNoInToday(roomNo.roomNo(), today, tomorrow).stream()
+        reserveRepository.findByRoomNoInToday(roomNo, today, tomorrow).stream()
                 .forEach(rsv -> {
                     for (int i = rsv.getStartTime().getHour(); i <= rsv.getEndTime().getHour(); i++) {
                         usingTimes.add(i);
@@ -87,8 +87,8 @@ public class ReserveService {
     /**
      * 해당 시간으로부터 1시간 내에 예약이 없는 방들을 반환
      */
-    public List<Long> getAvailableRoomListFromTime(ReserveOtherReqDTO.GetRoomListFromTime time) {
-        LocalDateTime plusOneHour = time.time().plusHours(1);
+    public List<Long> getAvailableRoomListFromTime(ReserveOtherReqDTO.GetRoomList req) {
+        LocalDateTime plusOneHour = req.time().plusHours(1);
 
         List<Long> usingRoomList = reserveRepository.findByStatusAndTime(plusOneHour).stream()
                 .map(rsv -> rsv.getRoomNo()).toList();
