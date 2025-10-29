@@ -1,10 +1,7 @@
 package com.raptarior.studyroomproj.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subject {
 
