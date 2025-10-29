@@ -1,9 +1,9 @@
 package com.raptarior.studyroomproj.service;
 
-import com.raptarior.studyroomproj.dto.SubjectMapper;
-import com.raptarior.studyroomproj.dto.SubjectReqDTOs;
-import com.raptarior.studyroomproj.dto.SubjectResDTO;
+import com.raptarior.studyroomproj.dto.*;
+import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.entity.Subject;
+import com.raptarior.studyroomproj.repository.MemberRepository;
 import com.raptarior.studyroomproj.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,15 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
     private final SubjectMapper subjectMapper;
+    private final MemberRepository memberRepository;
 
     public Long createSubject(SubjectReqDTOs.Create req) {
-        Subject subject = subjectMapper.reqDtoToEntity(req);
+        Member member = memberRepository.findById(req.memberId()).orElseThrow();
+
+        Subject subject = Subject.builder()
+                .subjectName(req.subjectName())
+                .member(member).build();
+
         Subject result = subjectRepository.save(subject);
         return result.getId();
     }
