@@ -37,6 +37,9 @@ dependencies {
 
 	implementation 'org.mapstruct:mapstruct:1.6.3'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+
+	implementation("org.flywaydb:flyway-core:11.15.0")
+	implementation("org.flywaydb:flyway-mysql:11.15.0")
 }
 
 tasks.named('test') {
