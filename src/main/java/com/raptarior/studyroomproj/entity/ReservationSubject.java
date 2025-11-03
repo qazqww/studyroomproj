@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class ReservationSubject {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
