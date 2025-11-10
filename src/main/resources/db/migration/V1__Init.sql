@@ -2,7 +2,7 @@
 -- studyroomdb.`member` definition
 CREATE TABLE IF NOT EXISTS `member` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nickname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
