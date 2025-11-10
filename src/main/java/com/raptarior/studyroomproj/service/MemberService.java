@@ -6,6 +6,7 @@ import com.raptarior.studyroomproj.dto.MemberResDTO;
 import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +16,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public Long joinMember(MemberInfoReqDTO memberInfoReqDTO) {
-        Member newMember = memberMapper.infoReqDtoToEntity(memberInfoReqDTO);
+        Member newMember = Member.create(memberInfoReqDTO, passwordEncoder);
         Member result = memberRepository.save(newMember);
         return result.getId();
     }

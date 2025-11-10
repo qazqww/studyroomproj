@@ -1,7 +1,9 @@
 package com.raptarior.studyroomproj.entity;
 
+import com.raptarior.studyroomproj.dto.MemberInfoReqDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,13 @@ public class Member {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
+    }
+
+    public static Member create(MemberInfoReqDTO dto, BCryptPasswordEncoder encoder) {
+        return Member.builder()
+                .email(dto.getEmail())
+                .nickname(dto.getNickname())
+                .password(encoder.encode(dto.getPassword())).build();
     }
 
     public void changeNickname(String nickname) {
