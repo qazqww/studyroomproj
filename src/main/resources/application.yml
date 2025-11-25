@@ -20,3 +20,6 @@ spring:
     locations:
       - classpath:db/migration
       - classpath:db/seed
+server:
+  servlet:
+    context-path: /api
