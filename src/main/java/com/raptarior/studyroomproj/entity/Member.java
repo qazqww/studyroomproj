@@ -4,6 +4,7 @@ import com.raptarior.studyroomproj.dto.MemberInfoReqDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Member {
         this.password = password;
     }
 
-    public static Member create(MemberInfoReqDTO dto, BCryptPasswordEncoder encoder) {
+    public static Member create(MemberInfoReqDTO dto, PasswordEncoder encoder) {
         return Member.builder()
                 .email(dto.getEmail())
                 .nickname(dto.getNickname())
