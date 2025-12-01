@@ -34,6 +34,7 @@ public class Reservation {
     private Member member;
 
     @OneToMany(mappedBy = "reservation")
+    @Setter
     private List<ReservationSubject> reservationSubjects = new ArrayList<>();
 
     @Builder

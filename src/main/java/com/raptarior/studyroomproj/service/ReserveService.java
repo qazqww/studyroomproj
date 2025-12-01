@@ -7,7 +7,9 @@ import com.raptarior.studyroomproj.dto.ReserveOtherReqDTO;
 import com.raptarior.studyroomproj.dto.ReserveResDTO;
 import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.entity.Reservation;
+import com.raptarior.studyroomproj.entity.ReservationSubject;
 import com.raptarior.studyroomproj.repository.MemberRepository;
+import com.raptarior.studyroomproj.repository.ReserveSubjectRepository;
 import com.raptarior.studyroomproj.repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,11 +32,14 @@ public class ReserveService {
     private final ReserveRepository reserveRepository;
     private final ReserveMapper reserveMapper;
     private final MemberRepository memberRepository;
+    private final ReserveSubjectRepository reserveSubjectRepository;
 
     public Long createReservation(ReserveInfoReqDTO req) {
         Reservation reservation = reserveMapper.infoReqDtoToEntity(req);
         Member member = memberRepository.findById(req.getMemberId()).orElseThrow();
         reservation.setMember(member);
+        List<ReservationSubject> reservationSubjects = reserveSubjectRepository.findAllById(req.getReservationSubjectIds());
+        reservation.setReservationSubjects(reservationSubjects);
 
         Reservation result = reserveRepository.save(reservation);
         return result.getId();
@@ -49,7 +55,13 @@ public class ReserveService {
     @Transactional(readOnly = true)
     public List<ReserveResDTO> getReservationList(Long memberId) {
         List<Reservation> reservationList = reserveRepository.findByMemberId(memberId);
-        List<ReserveResDTO> reserveResDTOList = reserveMapper.entityToResDtoList(reservationList);
+        List<ReserveResDTO> reserveResDTOList = new ArrayList<>();
+
+        for (Reservation rsv : reservationList) {
+            ReserveResDTO rsvDto = reserveMapper.entityToResDto(rsv);
+            reserveResDTOList.add(rsvDto);
+        }
+
         return reserveResDTOList;
     }
 

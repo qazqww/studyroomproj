@@ -30,5 +30,6 @@ public class ReserveResDTO {
     @Setter
     private Long memberId;
 
-    private List<ReservationSubject> reservationSubjects;
+    @Setter
+    private List<Long> reservationSubjectIds;
 }
