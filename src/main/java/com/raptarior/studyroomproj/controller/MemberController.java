@@ -17,26 +17,26 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    private ResponseEntity<Void> joinMember(MemberInfoReqDTO memberPostReqDTO) {
+    public ResponseEntity<Void> joinMember(@RequestBody MemberInfoReqDTO memberPostReqDTO) {
         Long memberId = memberService.joinMember(memberPostReqDTO);
         URI location = URI.create("/member/" + memberId);
         return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/{memberId}")
-    private ResponseEntity<MemberResDTO> findMember(@PathVariable Long memberId) {
+    public ResponseEntity<MemberResDTO> findMember(@PathVariable Long memberId) {
         MemberResDTO memberResDTO = memberService.findMember(memberId);
         return ResponseEntity.ok(memberResDTO);
     }
 
     @PutMapping("/{memberId}")
-    private ResponseEntity<Void> modifyMember(@PathVariable Long memberId, MemberInfoReqDTO memberInfoReqDTO) {
+    public ResponseEntity<Void> modifyMember(@PathVariable Long memberId, @RequestBody MemberInfoReqDTO memberInfoReqDTO) {
         memberService.modifyMember(memberId, memberInfoReqDTO);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{memberId}")
-    private ResponseEntity<Void> removeMember(@PathVariable Long memberId) {
+    public ResponseEntity<Void> removeMember(@PathVariable Long memberId) {
         memberService.removeMember(memberId);
         return ResponseEntity.noContent().build();
     }

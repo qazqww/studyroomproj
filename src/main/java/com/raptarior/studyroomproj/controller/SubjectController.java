@@ -18,32 +18,32 @@ public class SubjectController {
     private final SubjectService subjectService;
 
     @PostMapping
-    private ResponseEntity<Void> createSubject(SubjectReqDTOs.Create req) {
+    public ResponseEntity<Void> createSubject(@RequestBody SubjectReqDTOs.Create req) {
         Long subjectId = subjectService.createSubject(req);
         URI location = URI.create("/subject/" + subjectId);
         return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/{subjectId}")
-    private ResponseEntity<SubjectResDTO> getSubject(@PathVariable Long subjectId) {
+    public ResponseEntity<SubjectResDTO> getSubject(@PathVariable Long subjectId) {
         SubjectResDTO subjectResDTO = subjectService.getSubject(subjectId);
         return ResponseEntity.ok(subjectResDTO);
     }
 
     @GetMapping("/list/{memberId}")
-    private ResponseEntity<List<SubjectResDTO>> getSubjectList(@PathVariable Long memberId) {
+    public ResponseEntity<List<SubjectResDTO>> getSubjectList(@PathVariable Long memberId) {
         List<SubjectResDTO> subjectResDTOList =  subjectService.getSubjectList(memberId);
         return ResponseEntity.ok(subjectResDTOList);
     }
 
     @PutMapping("/{subjectId}")
-    private ResponseEntity<Void> updateSubject(@PathVariable Long subjectId, SubjectReqDTOs.Update req) {
+    public ResponseEntity<Void> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectReqDTOs.Update req) {
         subjectService.updateSubject(subjectId, req);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{subjectId}")
-    private ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
+    public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
         subjectService.deleteSubject(subjectId);
         return ResponseEntity.noContent().build();
     }
