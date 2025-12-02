@@ -23,5 +23,5 @@ public class ReserveInfoReqDTO {
 
     private Long memberId;
 
-    private List<Long> reservationSubjectIds;
+    private List<Long> subjectIds;
 }

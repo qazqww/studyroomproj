@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +55,7 @@ class ReserveServiceTest {
                 .startTime(LocalDateTime.now().plusHours(1))
                 .endTime(LocalDateTime.now().plusHours(2))
                 .memberId(memberId1)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>(Arrays.asList(1L, 2L))).build();
 
         Long resultId = reserveService.createReservation(dto);
         ReserveResDTO result = reserveService.getReservation(resultId);
@@ -71,19 +72,19 @@ class ReserveServiceTest {
                 .startTime(LocalDateTime.now().plusHours(1))
                 .endTime(LocalDateTime.now().plusHours(2))
                 .memberId(memberId1)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
         ReserveInfoReqDTO dto2 = ReserveInfoReqDTO.builder()
                 .roomNo(3L)
                 .startTime(LocalDateTime.now().plusHours(3))
                 .endTime(LocalDateTime.now().plusHours(5))
                 .memberId(memberId2)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
         ReserveInfoReqDTO dto3 = ReserveInfoReqDTO.builder()
                 .roomNo(5L)
                 .startTime(LocalDateTime.now().plusHours(2))
                 .endTime(LocalDateTime.now().plusHours(4))
                 .memberId(memberId1)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
 
         reserveService.createReservation(dto);
         reserveService.createReservation(dto2);
@@ -106,13 +107,13 @@ class ReserveServiceTest {
                 .startTime(LocalDateTime.now())
                 .endTime(LocalDateTime.now().plusHours(2))
                 .memberId(memberId1)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
         ReserveInfoReqDTO dto2 = ReserveInfoReqDTO.builder()
                 .roomNo(3L)
                 .startTime(LocalDateTime.now().plusHours(3))
                 .endTime(LocalDateTime.now().plusHours(5))
                 .memberId(memberId2)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
 
         reserveService.createReservation(dto);
         reserveService.createReservation(dto2);
@@ -135,13 +136,13 @@ class ReserveServiceTest {
                 .startTime(startTime)
                 .endTime(endTime)
                 .memberId(memberId1)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
         ReserveInfoReqDTO dto2 = ReserveInfoReqDTO.builder()
                 .roomNo(30L)
                 .startTime(startTime2)
                 .endTime(endTime2)
                 .memberId(memberId2)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
 
         reserveService.createReservation(dto);
         reserveService.createReservation(dto2);
@@ -164,13 +165,13 @@ class ReserveServiceTest {
                 .startTime(startTime)
                 .endTime(endTime)
                 .memberId(memberId1)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
         ReserveInfoReqDTO dto2 = ReserveInfoReqDTO.builder()
                 .roomNo(51L)
                 .startTime(startTime2)
                 .endTime(endTime2)
                 .memberId(memberId2)
-                .reservationSubjectIds(new ArrayList<>()).build();
+                .subjectIds(new ArrayList<>()).build();
 
         reserveService.createReservation(dto);
         reserveService.createReservation(dto2);
