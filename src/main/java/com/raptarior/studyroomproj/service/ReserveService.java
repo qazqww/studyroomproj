@@ -8,9 +8,11 @@ import com.raptarior.studyroomproj.dto.ReserveResDTO;
 import com.raptarior.studyroomproj.entity.Member;
 import com.raptarior.studyroomproj.entity.Reservation;
 import com.raptarior.studyroomproj.entity.ReservationSubject;
+import com.raptarior.studyroomproj.entity.Subject;
 import com.raptarior.studyroomproj.repository.MemberRepository;
 import com.raptarior.studyroomproj.repository.ReserveSubjectRepository;
 import com.raptarior.studyroomproj.repository.ReserveRepository;
+import com.raptarior.studyroomproj.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,17 +34,27 @@ public class ReserveService {
     private final ReserveRepository reserveRepository;
     private final ReserveMapper reserveMapper;
     private final MemberRepository memberRepository;
-    private final ReserveSubjectRepository reserveSubjectRepository;
+    private final SubjectRepository subjectRepository;
 
+    @Transactional
     public Long createReservation(ReserveInfoReqDTO req) {
         Reservation reservation = reserveMapper.infoReqDtoToEntity(req);
+
         Member member = memberRepository.findById(req.getMemberId()).orElseThrow();
         reservation.setMember(member);
-        List<ReservationSubject> reservationSubjects = reserveSubjectRepository.findAllById(req.getReservationSubjectIds());
-        reservation.setReservationSubjects(reservationSubjects);
 
-        Reservation result = reserveRepository.save(reservation);
-        return result.getId();
+        for (Long subjectId : req.getSubjectIds()) {
+            Subject subject = subjectRepository.findById(subjectId).orElseThrow();
+            ReservationSubject rs = ReservationSubject.builder()
+                    .reservation(reservation)
+                    .subject(subject).build();
+
+            reservation.getReservationSubjects().add(rs);
+            subject.getReservationSubjects().add(rs);
+        }
+
+        reserveRepository.save(reservation);
+        return reservation.getId();
     }
 
     @Transactional(readOnly = true)

@@ -1,6 +1,7 @@
 package com.raptarior.studyroomproj.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.jetbrains.annotations.TestOnly;
 
@@ -18,6 +19,12 @@ public class ReservationSubject {
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private Subject subject;
+
+    @Builder
+    private ReservationSubject(Reservation reservation, Subject subject) {
+        this.reservation = reservation;
+        this.subject = subject;
+    }
 
     @TestOnly
     public void setId(Long id) {

@@ -33,7 +33,7 @@ public class Reservation {
     @Setter
     private Member member;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @Setter
     private List<ReservationSubject> reservationSubjects = new ArrayList<>();
 
